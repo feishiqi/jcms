@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.mybatis.example.UsersMapper"><!-- 命名空间 -->
+
+	<resultMap id="suersMaper" type="com.joshuait.entity.Users">
+		<result column="user_login" property="userLogin"  /><!-- 列，属性 -->
+		<result column="user_pass" property="userPass"  />
+		<result column="user_nicename" property="userNicename"  />
+		<result column="user_email" property="userEmail"  />
+		<result column="user_registered" property="userRegistered"  />
+		<result column="user_activation_key" property="userActivation_key"  />
+		<result column="user_status" property="userStatus"  />
+		<result column="user_displayName" property="displayName"  />
+	</resultMap>
+
+	<select id="getById" parameterType="int" resultMap ="suersMaper">
+		select * from wp_users where id =#{id}
+	</select>
+	
+	<select id="search" parameterType="com.joshuait.entity.Users"
+		 resultMap ="suersMaper">
+		select * from wp_users
+		<where>
+			<if test="id != null">
+			    id = #{id}
+			</if> 
+			<if test="userLogin != null">
+			    user_login = #{userLogin}
+			</if> 
+		</where>
+	</select>
+	
+	<insert id="insert" parameterType="com.joshuait.entity.Users" 
+		useGeneratedKeys="true"
+  	 	keyProperty="id">
+	  insert into wp_users
+		(user_login,user_pass,user_nicename,user_email,user_registered,user_activation_key,user_status,display_name)
+		values
+		(#{userLogin},#{userPass},#{userNicename},#{userEmail},#{userRegistered},#{userActivation_key},#{userStatus},#{displayName})
+	</insert>
+	
+	<update id="update" parameterType="com.joshuait.entity.Users">
+		  update wp_users 
+		   <set>
+		      <if test="userLogin != null">user_login=#{userLogin},</if>
+		      <if test="userPass != null">user_pass=#{userPass}</if>
+		    </set>
+		  where id = #{id}
+	</update>
+	
+	<delete id="delete">
+  delete from wp_users where id = #{id}
+</delete>
+
+</mapper>
